@@ -69,7 +69,7 @@ class ClassificationModel(training.base_trainer.BaseTrainer):
         # Task Backend
         if self.settings.use_task_a or self.settings.use_task_b:
             self.task_backend = nn.Sequential(*(list(models.resnet18(pretrained=True).children())[6:-1] +
-                                                [nn.Flatten(), nn.Linear(512, 101)]))
+                                                [nn.Flatten(), nn.Linear(512, 11)]))
             self.models_dict["back_end"] = self.task_backend
 
         # Decoders

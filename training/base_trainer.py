@@ -11,6 +11,9 @@ from datasets.object_det_loader import ObjectDetLoader
 from datasets.wrapper_dataloader import WrapperDataset
 import utils.viz_utils as viz_utils
 
+import tonic
+import tonic.transforms as transforms
+from tonic import DiskCachedDataset
 
 class BaseTrainer(object):
     """BaseTrainer class to be inherited"""
@@ -112,6 +115,30 @@ class BaseTrainer(object):
                                                  num_workers=self.settings.num_cpu_workers,
                                                  pin_memory=False, shuffle=True, drop_last=True)
             val_loader_sensor = dataset_loader(val_dataset, batch_size=batch_size,
+                                               num_workers=self.settings.num_cpu_workers,
+                                               pin_memory=False, shuffle=False, drop_last=True)
+
+        elif dataset_name == 'NCaltech101_events':
+            dataset_loader = torch.utils.data.DataLoader
+
+            sensor_size = tonic.datasets.DVSGesture.sensor_size
+
+            # dataset_loader = torch.utils.data.DataLoader
+            #Define transformations
+            frame_transform = transforms.Compose([transforms.ToImage(sensor_size=sensor_size), transforms.DropEvent(p = 0.001), transforms.NumpyAsType(dtype=np.float32)])
+
+            #Define training and test sets
+            DVS_train = tonic.datasets.DVSGesture(save_to='/home/common_user/Desktop/rpg_ev-transfer/', transform=frame_transform, train=True)
+            DVS_test = tonic.datasets.DVSGesture(save_to='/home/common_user/Desktop/rpg_ev-transfer/', transform=frame_transform, train=False)
+            # DVS_train = torch.utils.data.TensorDataset(torch.tensor(DVS_train1).to(device), torch.tensor(test_data_y).to(device))
+            # print(DVS_train.shape)
+            #Create dataloaders
+            # train_loader_sensor = DataLoader(DVS_train, batch_size=batch_size, collate_fn=tonic.collation.PadTensors(batch_first=False), shuffle = True, drop_last = True)
+            # val_loader_sensor = DataLoader(DVS_test, batch_size=batch_size, collate_fn=tonic.collation.PadTensors(batch_first=False), shuffle = True, drop_last = True)
+            train_loader_sensor = dataset_loader(DVS_train, batch_size=batch_size,
+                                                 num_workers=self.settings.num_cpu_workers,
+                                                 pin_memory=False, shuffle=True, drop_last=True)
+            val_loader_sensor = dataset_loader(DVS_test, batch_size=batch_size,
                                                num_workers=self.settings.num_cpu_workers,
                                                pin_memory=False, shuffle=False, drop_last=True)
 

@@ -3,37 +3,37 @@ dataset:
   name_a: 'Caltech101_gray'
   name_b: 'NCaltech101_events'
   caltech101:
-    dataset_path: <path>
-    shape: [184, 240]
+    dataset_path: datasets/Paired_N-Caltech101/
+    shape: [128, 128]
   waymo:
-    dataset_path: <path>
+    dataset_path: None
     shape: [192, 352]
   ncaltech101:
-    dataset_path: <path>
-    shape: [184, 240]
+    dataset_path: datasets/Paired_N-Caltech101/
+    shape: [128, 128]
     nr_events_window: 25000
     event_representation: 'histogram'  # ['histogram', 'voxel_grid']
     nr_temporal_bins: 5  # Only used for 'voxel_grid'
   prophesee:
-    dataset_path: <path>
+    dataset_path: None
     shape: [160, 288]  # [240, 304]
     nr_events_window: 100000
     event_representation: 'histogram'  # ['histogram', 'voxel_grid']
     nr_temporal_bins: 5  # Only used for 'voxel_grid'
   onempprophesee:
-    dataset_path: <path>
+    dataset_path: None
     shape: [192, 352]
     nr_events_window: 500000
     event_representation: 'histogram'  # ['histogram', 'voxel_grid']
     nr_temporal_bins: 5  # Only used for 'voxel_grid'
   mvsec:
-    dataset_path: <path>
+    dataset_path: None
     shape: [192, 352]
     nr_events_window: 40000  # 25000 ~ Histogram
     event_representation: 'histogram'  # ['histogram', 'voxel_grid']
     nr_temporal_bins: 5  # Only used for 'voxel_grid'
 dir:
-  log: <path>
+  log: tb12
 model:
   # ['classification_model', 'object_det_model]
   model_name: 'classification_model'
@@ -47,8 +47,8 @@ model:
   cross_refinement_a: False
   cross_refinement_b: True
 optim:
-  batch_size_a: 20  # 20
-  batch_size_b: 20  # 20
+  batch_size_a: 4  # 20
+  batch_size_b: 4  # 20
   lr_discriminator: 1e-4 # 1e-4
   lr_front: 1e-4  # 1e-4
   lr_back: 1e-4  # 1e-4
@@ -56,7 +56,7 @@ optim:
   lr_decay: 0.9999  # 0.9999
   disc_iter: 2  # 2
   front_iter: 1  # 1
-  num_epochs: 5000
+  num_epochs: 10
   weight_generator_loss: 1  # 1
   weight_discriminator_loss: 1  # 1
   weight_task_loss: 2  # 1
