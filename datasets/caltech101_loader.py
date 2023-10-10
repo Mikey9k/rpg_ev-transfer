@@ -150,7 +150,7 @@ class Caltech101Gray(Caltech101RGB):
                 transforms.Pad(padding=(0, 0, self.width - scaled_width,
                                         self.height - scaled_height)),
                 transforms.RandomAffine(degrees=0, translate=[0.1, 0.1]),
-                transforms.RandomHorizontalFlip(p=0.5),
+                # transforms.RandomHorizontalFlip(p=0.5),
                 transforms.Grayscale(),
                 transforms.ToTensor()
             ])
