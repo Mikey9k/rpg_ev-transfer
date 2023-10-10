@@ -131,13 +131,13 @@ class ContentDiscriminator(nn.Module):
     def __init__(self, nr_channels, smaller_input=False):
         super(ContentDiscriminator, self).__init__()
         model = []
-        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=5, stride=2, padding=1, norm='Instance')]
-        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=5, stride=2, padding=1, norm='Instance')]
+        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=4, stride=2, padding=1, norm='Instance')]
+        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=4, stride=2, padding=1, norm='Instance')]
         if smaller_input:
-            model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=3, stride=1, padding=1, norm='Instance')]
+            model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=2, stride=1, padding=1, norm='Instance')]
         else:
-            model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=5, stride=1, padding=1, norm='Instance')]
-        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=3, stride=1, padding=0)]
+            model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=4, stride=1, padding=1, norm='Instance')]
+        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=2, stride=1, padding=0)]
         model += [nn.Conv2d(nr_channels, 1, kernel_size=1, stride=1, padding=0)]
         self.model = nn.Sequential(*model)
 
@@ -155,14 +155,14 @@ class CrossDiscriminator(nn.Module):
 
     def _make_net(self, ch, input_dim, n_layer, norm, sn):
         model = []
-        model += [LeakyReLUConv2d(input_dim, ch, kernel_size=3, stride=2, padding=1, norm=norm, sn=sn)] #16
+        model += [LeakyReLUConv2d(input_dim, ch, kernel_size=2, stride=2, padding=1, norm=norm, sn=sn)] #16
         tch = ch
 
         for i in range(1, n_layer-1):
-            model += [LeakyReLUConv2d(tch, tch * 2, kernel_size=3, stride=2, padding=1, norm=norm, sn=sn)] # 8
+            model += [LeakyReLUConv2d(tch, tch * 2, kernel_size=2, stride=2, padding=1, norm=norm, sn=sn)] # 8
             tch *= 2
 
-        model += [LeakyReLUConv2d(tch, tch * 2, kernel_size=3, stride=2, padding=1, norm='None', sn=sn)] # 2
+        model += [LeakyReLUConv2d(tch, tch * 2, kernel_size=2, stride=2, padding=1, norm='None', sn=sn)] # 2
         tch *= 2
         if sn:
             model += [torch.nn.utils.spectral_norm(nn.Conv2d(tch, 1, kernel_size=1, stride=1, padding=0))]  # 1
