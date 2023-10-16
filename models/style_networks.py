@@ -54,7 +54,7 @@ class E_attr_concat(nn.Module):
         max_ndf = 4
 
         conv_layers_A = [nn.ReflectionPad2d(1)]
-        conv_layers_A += [nn.Conv2d(input_dim, ndf, kernel_size=3, stride=2, padding=0, bias=True)]
+        conv_layers_A += [nn.Conv2d(input_dim, ndf, kernel_size=4, stride=2, padding=0, bias=True)]
         for n in range(1, n_blocks):
             input_ndf = ndf * min(max_ndf, n)  # 2**(n-1)
             output_ndf = ndf * min(max_ndf, n+1)  # 2**n
@@ -131,13 +131,13 @@ class ContentDiscriminator(nn.Module):
     def __init__(self, nr_channels, smaller_input=False):
         super(ContentDiscriminator, self).__init__()
         model = []
-        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=3, stride=2, padding=1, norm='Instance')]
-        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=3, stride=2, padding=1, norm='Instance')]
+        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=4, stride=2, padding=1, norm='Instance')]
+        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=4, stride=2, padding=1, norm='Instance')]
         if smaller_input:
-            model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=2, stride=1, padding=1, norm='Instance')]
-        else:
             model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=3, stride=1, padding=1, norm='Instance')]
-        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=2, stride=1, padding=0)]
+        else:
+            model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=4, stride=1, padding=1, norm='Instance')]
+        model += [LeakyReLUConv2d(nr_channels, nr_channels, kernel_size=3, stride=1, padding=0)]
         model += [nn.Conv2d(nr_channels, 1, kernel_size=1, stride=1, padding=0)]
         self.model = nn.Sequential(*model)
 

@@ -88,6 +88,10 @@ class Caltech101RGB(Dataset):
             self.files += new_files
             self.labels += [i] * len(new_files)
 
+            # print(self.files)
+            # print(self.labels)
+            # print("yyy")
+
     def __getitem__(self, idx):
         """
         Returns one data sample
@@ -149,7 +153,7 @@ class Caltech101Gray(Caltech101RGB):
                 transforms.Resize(size=[scaled_height, scaled_width]),
                 transforms.Pad(padding=(0, 0, self.width - scaled_width,
                                         self.height - scaled_height)),
-                transforms.RandomAffine(degrees=0, translate=[0.1, 0.1]),
+                # transforms.RandomAffine(degrees=0, translate=[0.1, 0.1]),
                 # transforms.RandomHorizontalFlip(p=0.5),
                 transforms.Grayscale(),
                 transforms.ToTensor()
